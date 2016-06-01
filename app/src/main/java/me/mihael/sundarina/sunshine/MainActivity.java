@@ -1,5 +1,6 @@
 package me.mihael.sundarina.sunshine;
 
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -8,18 +9,23 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
-public class MainActivity extends AppCompatActivity {
+import me.mihael.sundarina.sunshine.MainFragment.OnSelectedButtonListener;
+
+public class MainActivity extends AppCompatActivity implements OnSelectedButtonListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        if (savedInstanceState == null) {
+     /*   if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.container, new MainFragment())
                     .commit();
-        }
+         //   getSupportFragmentManager().beginTransaction()
+         //           .add(R.id.container, new SecondFragment())
+           //         .commit();
+        }*/
     }
 
     @Override
@@ -44,4 +50,24 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    /* информация от активности (не от фрагмента) об индексе.
+    метод будет получать от первого фрагмента индекс нажатой кнопки и передавать его второму фрагменту:*/
+
+    @Override
+    public void onButtonSelected(int buttonIndex) {
+        // подключаем FragmentManager
+        FragmentManager fragmentManager = getSupportFragmentManager();
+
+        // Получаем ссылку на второй фрагмент по ID
+        SecondFragment fragment2 = (SecondFragment) fragmentManager.findFragmentById(R.id.fragment_second);
+
+        // Выводим нужную информацию
+        if (fragment2 != null)
+            fragment2.setDescription(buttonIndex);
+
+        /*Активность получает доступ к своим фрагментам через специальный менеджер фрагментов.
+        Менеджер есть у любой активности, поэтому мы его не создаём через конструкцию new FragmentManager,
+         а получаем через метод getSupportFragmentManager() или для новых версий getFragmentManager().*/
+    }
 }
+
